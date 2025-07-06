@@ -13,6 +13,8 @@ const AdminMenu = () => {
     const [selectedCategory, setSelectedCategory] = useState(null);
     const [isFormShown, setIsFormShown] = useState(false);
     const [isAdmin, setIsAdmin] = useState(false);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+
 
     const ChangeForm = () => {
         setIsFormShown(!isFormShown);
@@ -26,6 +28,7 @@ const AdminMenu = () => {
                 router.push('/register');
             } else {
                 setIsAdmin(true);
+                setIsLoggedIn(true)
             }
         };
 
@@ -81,7 +84,7 @@ const AdminMenu = () => {
 
     return (
         <div className="adminmenu-container">
-            <Header />
+            <Header isLoggedIn = {isLoggedIn}/>
 
             {isFormShown ? (
                 <ArticleForm  articles = {articles}/>

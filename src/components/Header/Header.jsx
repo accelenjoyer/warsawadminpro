@@ -1,21 +1,30 @@
-import React from 'react';
+"use client";
+import React, {useEffect, useState} from 'react';
 import "./Header.scss"
 import {useRouter} from "next/navigation";
 const Header = () => {
     const router = useRouter();
-    const loggined = localStorage.getItem("admindata")
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+    useEffect(() => {
+        const adminData = localStorage.getItem("admindata");
+        setIsLoggedIn(!!adminData);
+    }, []);
+
     const handleClick = () => {
         localStorage.removeItem("admindata");
-        router.push("/register")
-    }
+        router.push("/register");
+    };
+
     return (
         <div className="header-container">
             Admin-menu сайта "Название сайта"
             <button className="logout-btn" onClick={handleClick}>
-                {loggined ? "Выйти" : "Войти"}
+                {isLoggedIn ? "Выйти" : "Войти"}
             </button>
         </div>
     );
 };
+
 
 export default Header;
