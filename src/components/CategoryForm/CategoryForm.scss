@@ -1,0 +1,130 @@
+.category-form {
+  width: 100%;
+  max-width: 400px;
+  margin: 20px auto;
+  padding: 20px;
+  border-radius: 8px;
+  bottom: 10px;
+  background-color: #181818;
+  position: fixed;
+  right: 0px;
+  scrollbar-width: none;
+  max-height: 800px;
+  box-sizing: border-box;
+  z-index: 1000;
+  left: auto;
+
+  &__title {
+    margin-bottom: 10px;
+    font-size: 1.2em;
+    font-weight: bold;
+  }
+
+  &__category-list {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 20px; //  Добавил отступ снизу
+  }
+
+  &__category-item {
+    padding: 8px 12px;
+    width: 95%;
+    border-radius: 4px;
+    margin-bottom: 5px;
+    background-color: #232323;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #0e0e0e;
+    }
+  }
+
+
+  &__message {
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    text-align: center;
+  }
+
+  &__message--success {
+    background-color: #e8f5e9;
+    color: #4caf50;
+    border: 1px solid #c8e6c9;
+  }
+
+  &__message--error {
+    background-color: #ffebee;
+    color: #f44336;
+    border: 1px solid #ffcdd2;
+  }
+
+  &__label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    font-size: 14px;
+  }
+
+  &__input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    color: #000000;
+    border-radius: 4px;
+    font-size: 16px;
+    background-color: rgb(255, 255, 255);
+  }
+
+  &__button {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    background-color: #000000;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.2s ease;
+
+
+    &:hover {
+      background-color: #252525;
+    }
+
+    &:focus {
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(24, 24, 24, 0.5);
+    }
+  }
+  &__scrollable-content {
+    max-height: 400px; /* Установите желаемую высоту скролла */
+    overflow-y: auto; /* Добавляем вертикальную прокрутку */
+    margin-bottom: 20px;
+    scrollbar-width: thin;
+    &::-webkit-scrollbar {
+      width: 8px; /* Ширина скроллбара */
+    }
+
+    &::-webkit-scrollbar-track {
+      background: #2d2d2d; /* Цвет фона дорожки */
+      border-radius: 4px; /* Скругление углов дорожки */
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: #555; /* Цвет ползунка */
+      border-radius: 4px; /* Скругление углов ползунка */
+
+      &:hover {
+        background-color: #777; /* Цвет ползунка при наведении */
+      }
+    }
+
+  }
+  svg {
+    align-self: flex-end;
+    justify-self: flex-end;
+    margin-left: auto;
+  }
+}
