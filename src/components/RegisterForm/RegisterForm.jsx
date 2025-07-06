@@ -1,6 +1,6 @@
 
 "use client";
-import React, {use, useState} from 'react';
+import React, {use, useEffect, useState} from 'react';
 import { useRouter } from 'next/navigation';
 import "./RegisterForm.scss"
 import LoginForm from "@/components/LoginForm/LoginForm";
@@ -14,17 +14,17 @@ const RegisterForm = () => {
 
     const [errors, setErrors] = useState({});
     const [isLoading, setIsLoading] = useState(false);
-    const [Login,goLogin] = useState(false)
+    const [Login, goLogin] = useState(false);
     const router = useRouter();
 
     const GoToLogin = () => {
-        goLogin(true)
-    }
+        goLogin(true);
+    };
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
         setErrors({});
-        console.log(formData)
+        console.log(formData);
     };
 
     const handleSubmit = async (e) => {
@@ -70,8 +70,10 @@ const RegisterForm = () => {
 
             if (response.ok) {
                 console.log('Регистрация успешна:', data);
-                localStorage.setItem("admindata", JSON.stringify(formData));
-                router.push('/adminmenu');
+
+            } else {
+
+                setErrors({ general: data.message || 'Произошла ошибка при регистрации' });
             }
         } catch (error) {
             console.error('Ошибка при отправке запроса:', error);
@@ -80,6 +82,14 @@ const RegisterForm = () => {
             setIsLoading(false);
         }
     };
+
+
+    useEffect(() => {
+        if (!isLoading && Object.keys(errors).length === 0 && formData.email) {
+            localStorage.setItem("admindata", JSON.stringify(formData));
+            router.push('/adminmenu');
+        }
+    }, [isLoading, errors, formData, router]);
 
     return (
         <div>
