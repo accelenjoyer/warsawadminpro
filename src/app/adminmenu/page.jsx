@@ -8,23 +8,32 @@ import Header from "@/components/Header/Header";
 import {useRouter} from "next/navigation";
 const AdminMenu = () => {
     const [articles, setArticles] = useState([]);
-    const [categories, setCategories] = useState([]); //  Добавлено состояние для получения категорий из API
+    const [categories, setCategories] = useState([]);
     const router = useRouter();
     const [selectedCategory, setSelectedCategory] = useState(null);
     const [isFormShown, setIsFormShown] = useState(false);
+    const [isAdmin, setIsAdmin] = useState(false);
 
     const ChangeForm = () => {
         setIsFormShown(!isFormShown);
     };
 
     useEffect(() => {
-        const adminData = localStorage.getItem('admindata');
-        if (!adminData) {
-            router.push('/register');
-        }
+
+        const checkAdminAuth = () => {
+            const adminData = localStorage.getItem('admindata');
+            if (!adminData) {
+                router.push('/register');
+            } else {
+                setIsAdmin(true);
+            }
+        };
+
+
+        checkAdminAuth();
     }, [router]);
 
-    // Загрузка категорий из API
+
     useEffect(() => {
         const fetchCategories = async () => {
             try {
@@ -33,16 +42,15 @@ const AdminMenu = () => {
                     throw new Error('Ошибка при получении категорий');
                 }
                 const data = await response.json();
-                setCategories(data); // Обновляем состояние с полученными категориями
+                setCategories(data);
             } catch (error) {
                 console.error('Ошибка при получении категорий:', error);
-                // Обработка ошибок (отображение пользователю)
+
             }
         };
 
         fetchCategories();
-        // fetchCategories(); //  Удалено, чтобы избежать двойного вызова
-    }, []); //  Пустой массив зависимостей, чтобы выполнить эффект только один раз при монтировании компонента
+    }, []);
 
     useEffect(() => {
         const fetchArticles = async () => {
@@ -66,10 +74,15 @@ const AdminMenu = () => {
         setSelectedCategory(categorySlug);
     };
 
+
+    if (!isAdmin) {
+        return <p>Проверка авторизации...</p>;
+    }
+
     return (
         <div className="adminmenu-container">
             <Header />
-            {/* Передаем categories в ArticleForm и Sidebar */}
+
             {isFormShown ? (
                 <ArticleForm  articles = {articles}/>
             ) : (
