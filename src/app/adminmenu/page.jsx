@@ -40,7 +40,7 @@ const AdminMenu = () => {
     useEffect(() => {
         const fetchCategories = async () => {
             try {
-                const response = await fetch('http://localhost:5000/api/getcategories');
+                const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/getcategories`);
                 if (!response.ok) {
                     throw new Error('Ошибка при получении категорий');
                 }
@@ -58,9 +58,9 @@ const AdminMenu = () => {
     useEffect(() => {
         const fetchArticles = async () => {
             try {
-                let url = 'http://localhost:5000/api/adminmenu';
+                let url = `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/adminmenu`;
                 if (selectedCategory) {
-                    url = `http://localhost:5000/api/articles/category/${selectedCategory}`;
+                    url = `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/articles/category/${selectedCategory}`;
                 }
                 const response = await fetch(url);
                 const data = await response.json();

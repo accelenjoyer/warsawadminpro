@@ -17,7 +17,7 @@ const CategoryForm = ({ onCategoryCreated, categories, changeCategories }) => {
         }
 
         try {
-            const response = await fetch('http://localhost:5000/api/addcategory', {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/adminmenu/api/addcategory`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
