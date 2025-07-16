@@ -17,37 +17,9 @@ const AdminMenu = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
 
-    const ChangeForm = () => {
-        setIsFormShown(!isFormShown);
-    };
 
-    useEffect(() => {
-        const checkAdminAuth = () => {
-            // Check if we're on the client side
-            if (typeof window !== 'undefined') {
-                const adminData = localStorage.getItem('admindata');
-                if (!adminData) {
-                    router.push('/register');
-                } else {
-                    setIsAdmin(true);
-                    setIsLoggedIn(true);
-                }
-                setIsLoading(false);
-            }
-        };
 
-        checkAdminAuth();
-    }, [router]);
 
-    // ... rest of your useEffect hooks remain the same
-
-    if (isLoading) {
-        return <p>Проверка авторизации...</p>;
-    }
-
-    if (!isAdmin) {
-        return null; // or redirect component
-    }
 
     return (
         <div className="adminmenu-container">
