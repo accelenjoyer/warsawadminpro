@@ -64,13 +64,10 @@ const AdminMenu = () => {
     };
 
 
-    if (!isAdmin) {
-        return <p>Проверка авторизации...</p>;
-    }
 
     return (
         <div className="adminmenu-container">
-            <Header isLoggedIn = {isLoggedIn}/>
+            <Header/>
 
             {isFormShown ? (
                 <ArticleForm  articles = {articles}/>
