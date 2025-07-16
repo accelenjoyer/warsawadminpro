@@ -7,7 +7,7 @@ function EditorComponent({ content }) {
         <ReactEditorJS
             defaultValue={content}
             tools={{
-                // Настройте нужные инструменты
+
                 header: Header,
                 list: List,
                 image: ImageTool

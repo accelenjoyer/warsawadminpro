@@ -20,21 +20,7 @@ const AdminMenu = () => {
         setIsFormShown(!isFormShown);
     };
 
-    useEffect(() => {
 
-        const checkAdminAuth = () => {
-            const adminData = localStorage.getItem('admindata');
-            if (!adminData) {
-                router.push('/register');
-            } else {
-                setIsAdmin(true);
-                setIsLoggedIn(true)
-            }
-        };
-
-
-        checkAdminAuth();
-    }, [router]);
 
 
     useEffect(() => {
