@@ -11,7 +11,7 @@
   h2 {
     margin-bottom: 20px;
     text-align: center;
-    font-size: 40px;
+    font-size: 30px;
   }
 
   &__list {
@@ -34,7 +34,7 @@
   }
   &__item {
     margin-bottom: 20px;
-    padding: 15px;
+    padding: 25px;
     border: 1px solid #ddd;
     border-radius: 8px;
     display: flex;               
@@ -47,13 +47,17 @@
   }
 
   &__author {
-    font-style: italic;
-    color: #777;
+
+    color: #000000;
     margin-bottom: 5px;
   }
 
   &__content {
     margin-bottom: 10px;
+  }
+  &__meta {
+    display: flex;
+    gap: 20px;
   }
 
   &__categories {
@@ -83,4 +87,7 @@
     object-position: center;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   }
+}
+.news-list__item--current {
+  border: 2px blueviolet solid;
 }

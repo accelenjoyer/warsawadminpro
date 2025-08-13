@@ -6,7 +6,7 @@ import DOMPurify from 'dompurify';
 
 
 
-const ArticlesList = ({ articles, setArticles }) => {
+const ArticlesList = ({ articles, setArticles,change,currentArticle }) => {
     const handleDeleteArticle = async (articleId) => {
         try {
             const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/adminmenu/${articleId}`, {
@@ -58,9 +58,17 @@ const ArticlesList = ({ articles, setArticles }) => {
         <div className="news-list">
             <h2>Список новостей</h2>
             {articles?.length > 0 ? (
-                <ul className="news-list__list">
+                <ul className="news-list__list" >
                     {articles.map(article => (
-                        <li key={article._id} className="news-list__item">
+                        <li
+                            key={article._id}
+                            className={`news-list__item${currentArticle && currentArticle._id === article._id ? ' news-list__item--current' : ''}`}
+                            onClick={() => {if (currentArticle !== article) {
+                                console.log(article)
+                                change(article)
+                            }
+                            else change(null)}}
+                        >
                             <div className="btn-container">
                                 <button
                                     className="dlt-btn"
@@ -104,9 +112,7 @@ const ArticlesList = ({ articles, setArticles }) => {
                                         />
                                     </svg>
                                 </button>
-                                <button className="edit-btn">
 
-                                </button>
                             </div>
 
                             <h3 className="news-list__title">{article.title || 'Без названия'}</h3>
@@ -115,15 +121,16 @@ const ArticlesList = ({ articles, setArticles }) => {
                                 <span className="news-list__date">{formatDate(article.date)}</span>
                             </div>
 
-                            {/* Основное содержимое */}
-                            <div
+                            {/* Основное содержимое
+                              <div
                                 className="news-list__content"
                                 dangerouslySetInnerHTML={{ __html: sanitizeContent(article.content) }}
-                            />
+                            /> */}
+
 
                             {/* Основное изображение */}
                             {article.images && (
-                                <div className="news-list__image-container">
+                                <div className="news-list__image-container" >
                                     <img
                                         src={article.images.startsWith('http') ? article.images : `${process.env.NEXT_PUBLIC_API_URL || ''}${article.images}`}
                                         alt="Иллюстрация к статье"
@@ -131,7 +138,9 @@ const ArticlesList = ({ articles, setArticles }) => {
                                         onError={(e) => {
                                             e.target.style.display = 'none';
                                         }}
+
                                     />
+
                                 </div>
                             )}
 

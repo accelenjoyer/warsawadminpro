@@ -4,7 +4,7 @@ import Link from "next/link";
 import "./Sidebar.scss"
 import CategoryForm from "@/components/CategoryForm/CategoryForm";
 
-const Sidebar = ({ categories, onCategorySelect, swapForm }) => {
+const Sidebar = ({ categories, onCategorySelect, swapForm,currentArticle,change}) => {
     const [isOpen, setIsOpen] = useState(true);
     const [selectedCategory, setSelectedCategory] = useState(null);
     const [showCategoryForm, setShowCategoryForm] = useState(false); //  Состояние для отображения формы
@@ -14,7 +14,10 @@ const Sidebar = ({ categories, onCategorySelect, swapForm }) => {
     useEffect(() => {
         setCategoriesList(categories);
     }, [categories]);
-
+    const swapFormAndRemove = () => {
+        change(null);
+        swapForm()
+    }
     const handleCategoryClick = (category) => {
         const newSelectedCategory = selectedCategory === category.name ? null : category.name;
         setSelectedCategory(newSelectedCategory);
@@ -62,14 +65,18 @@ const Sidebar = ({ categories, onCategorySelect, swapForm }) => {
                         </li>
                     ))}
                 </ul>
-                <button onClick={swapForm} className="swap-button" style={{ marginBottom: "20px" }}>
+                <button onClick={swapFormAndRemove} className="swap-button" style={{ marginBottom: "20px" }}>
                     Создать статью
+                </button>
+                <button onClick={swapForm} disabled={!currentArticle} className="swap-button" style={{ marginBottom: "20px" }}>
+                    Изменить статью
                 </button>
                 <button onClick={toggleCategoryForm} className="swap-button">
                     Создать категорию
                 </button>
+
                 {showCategoryForm && (
-                    <CategoryForm onCategoryCreated={handleCategoryCreated} categories = {categoriesList} changeCategories = {setCategoriesList} />  //  Передаем функцию для обновления списка
+                    <CategoryForm onCategoryCreated={handleCategoryCreated} categories = {categoriesList} changeCategories = {setCategoriesList} showcatform = {setShowCategoryForm} />  //  Передаем функцию для обновления списка
                 )}
             </nav>
         </aside>

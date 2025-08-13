@@ -9,7 +9,10 @@ import "./ArticleForm.scss";
 
 import DOMPurify from 'dompurify';
 
-const ArticleForm = () => {
+
+
+const ArticleForm = ({currentArticle}) => {
+    console.log(22)
     const editorInstance = useRef(null);
     const [isEditorReady, setIsEditorReady] = useState(false);
     const localData = localStorage.getItem("admindata");
@@ -30,7 +33,14 @@ const ArticleForm = () => {
 
     // Инициализация Editor.js
     useEffect(() => {
+        console.log(22)
         const initEditor = async () => {
+            const container = document.getElementById('editorjs-container');
+            if (!container) {
+                // Ждём пока DOM элемент появится
+                setTimeout(initEditor, 100);
+                return;
+            }
             editorInstance.current = new EditorJS({
                 holder: 'editorjs-container',
                 tools: {
@@ -121,8 +131,31 @@ const ArticleForm = () => {
             [name]: value,
         }));
     };
+    useEffect(() => {
+        if (currentArticle && isEditorReady && editorInstance.current) {
+            setFormData({
+                title: currentArticle.title || '',
+                rawContent: currentArticle.rawContent || { blocks: [] },
+                images: currentArticle.images || null,
+                author: currentArticle.author || authorName,
+                categories: currentArticle.categories
+                    ? currentArticle.categories.map(cat => typeof cat === 'string' ? cat : cat._id)
+                    : [],
+            });
+
+            editorInstance.current.isReady
+                .then(() => {
+                    if (currentArticle.rawContent) {
+                        editorInstance.current.render(currentArticle.rawContent);
+                    }
+                })
+                .catch((err) => console.error('Editor render error:', err));
+        }
+    }, [currentArticle, isEditorReady]);
+
 
     const handleImageChange = async (e) => {
+        console.log("start")
         const file = e.target.files[0];
         if (!file) return;
 
@@ -131,8 +164,10 @@ const ArticleForm = () => {
             return;
         }
 
+        console.log('Selected image file:', file);
         try {
             const base64 = await toBase64(file);
+
             setFormData(prev => ({
                 ...prev,
                 images: base64,
@@ -154,12 +189,13 @@ const ArticleForm = () => {
 
     const handleCategoryToggle = (categoryId) => {
         setFormData(prev => {
-            const isSelected = prev.categories.includes(categoryId);
+            const newCategories = prev.categories.includes(categoryId)
+                ? prev.categories.filter(id => id !== categoryId)
+                : [...new Set([...prev.categories, categoryId])];
+
             return {
                 ...prev,
-                categories: isSelected
-                    ? prev.categories.filter(id => id !== categoryId)
-                    : [...prev.categories, categoryId]
+                categories: newCategories,
             };
         });
     };
@@ -170,7 +206,6 @@ const ArticleForm = () => {
         setError('');
 
         try {
-            // Валидация
             if (!formData.title.trim()) {
                 throw new Error('Заголовок обязателен');
             }
@@ -183,21 +218,30 @@ const ArticleForm = () => {
                 throw new Error('Выберите хотя бы одну категорию');
             }
 
-            // Подготовка данных для отправки
-            const formDataToSend = new FormData();
-            formDataToSend.append('title', formData.title);
-            formDataToSend.append('rawContent', JSON.stringify(formData.rawContent));
-            formDataToSend.append('author', formData.author);
-            formDataToSend.append('categories', JSON.stringify(formData.categories));
-
-            if (formData.images && typeof formData.images !== 'string') {
-                formDataToSend.append('image', formData.images);
+            if (!formData.images) {
+                throw new Error('Выберите изображение');
             }
 
-            // Отправка данных
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/adminmenu`, {
-                method: 'POST',
-                body: formDataToSend,
+            const formDataToSend = {
+                title: formData.title,
+                rawContent: formData.rawContent,
+                author: formData.author,
+                categories: formData.categories,
+                images: formData.images,
+            };
+
+            const isEditMode = !!currentArticle?._id;
+            const method = isEditMode ? 'PUT' : 'POST';
+            const url = isEditMode
+                ? `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/adminmenu/${currentArticle._id}`
+                : `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/adminmenu`;
+
+            const response = await fetch(url, {
+                method,
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formDataToSend),
             });
 
             if (!response.ok) {
@@ -205,7 +249,6 @@ const ArticleForm = () => {
                 throw new Error(errorData.message || 'Ошибка сервера');
             }
 
-            // Сброс формы
             setFormData({
                 title: '',
                 rawContent: { blocks: [] },
@@ -218,12 +261,13 @@ const ArticleForm = () => {
                 editorInstance.current.clear();
             }
 
-            setMessage('Статья успешно сохранена!');
+            setMessage(isEditMode ? 'Статья успешно обновлена!' : 'Статья успешно создана!');
         } catch (error) {
             console.error('Ошибка при сохранении статьи:', error);
             setError(DOMPurify.sanitize(error.message));
         }
     };
+
 
     return (
         <form onSubmit={handleSubmit} className="article-form">

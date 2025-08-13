@@ -1,11 +1,15 @@
 "use client"
 import React, {useState} from 'react';
 import "./CategoryForm.scss"
-const CategoryForm = ({ onCategoryCreated, categories, changeCategories }) => {
+const CategoryForm = ({ onCategoryCreated, categories, changeCategories,showcatform }) => {
     const [categoryName, setCategoryName] = useState('');
     const [error, setError] = useState('');
     const [success, setSuccess] = useState(false);
     const [activatedCategories, setActivatedCategories] = useState({})
+    const [isClosed,Close] = useState(false)
+    const Toggle = ()=> {
+        showcatform(false)
+    }
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
@@ -50,6 +54,23 @@ const CategoryForm = ({ onCategoryCreated, categories, changeCategories }) => {
 
     return (
         <div className="category-form">
+            <button className="dlt-btn" onClick={Toggle}>
+                <svg className="delete-svg"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                >
+                    <circle cx="12" cy="12" r="12" fill="#e53935" />
+                    <path
+                        d="M15.5 8.5L12 12m0 0L8.5 15.5M12 12l3.5 3.5M12 12L8.5 8.5"
+                        stroke="white"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                    />
+                </svg>
+            </button>
             {success && <p className={`category-form__message category-form__message--success`}>Категория успешно создана!</p>}
             {error && <p className={`category-form__message category-form__message--error`}>{error}</p>}
 
