@@ -143,7 +143,9 @@ const ArticlesList = ({ articles, setArticles,change,currentArticle }) => {
 
                                 </div>
                             )}
-
+                            <div>
+                                {currentArticle ?  <div dangerouslySetInnerHTML={{ __html: article.content }} /> : null}
+                            </div>
                             {/* Категории с проверкой */}
                             {article.categories?.length > 0 && (
                                 <ul className="news-list__categories">
