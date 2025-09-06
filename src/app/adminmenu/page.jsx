@@ -2,7 +2,7 @@
 import React, {useEffect, useState} from 'react';
 import Sidebar from "@/components/Sidebar/Sidebar";
 import "./adminmenu.scss"
-import ArticleForm from "@/components/ArticleForm/ArticleForm";
+
 import ArticlesList from "@/components/ArticlesList/ArticlesList";
 import Header from "@/components/Header/Header";
 import {useRouter} from "next/navigation";
@@ -87,12 +87,8 @@ const AdminMenu = () => {
         <div className="adminmenu-container">
             <Header isLoggedIn={isLoggedIn}/>
             <Sidebar categories={categories} onCategorySelect={handleCategorySelect} swapForm={ChangeForm} currentArticle = {currentArticle} change = {setCurrentArticle}/>
-            {isFormShown ? (
-                <ArticleForm articles={articles} currentArticle = {currentArticle}/>
-            ) : (
-                <ArticlesList articles={articles} setArticles={setArticles} change = {ChangeCurrentArticle} currentArticle = {currentArticle}/>
-            )}
 
+                <ArticlesList articles={articles} setArticles={setArticles} change = {ChangeCurrentArticle} currentArticle = {currentArticle}/>
         </div>
     );
 };
