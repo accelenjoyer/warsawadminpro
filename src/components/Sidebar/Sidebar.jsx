@@ -35,7 +35,8 @@ const Sidebar = ({ categories, onCategorySelect, swapForm,currentArticle,change}
     const handleCategoryCreated = async () => {
 
         try {
-            const response = await fetch('http://localhost:5000/api/getcategories');
+                       const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/getcategories`)
+
             if (!response.ok) {
                 throw new Error('Ошибка при получении категорий');
             }
